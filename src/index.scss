@@ -1,0 +1,16 @@
+@import '~bootstrap/scss/bootstrap';
+@import '~notyf/notyf.min.css';
+
+body {
+  background: #fff;
+}
+
+.content {
+  background: #efefef;
+}
+
+#stamp-screen {
+  background: #fff !important;
+  height: 70vh;
+  border: dashed 5px #ddd;
+}
