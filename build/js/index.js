@@ -2155,7 +2155,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _snowshoe_stamp_listener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @snowshoe/stamp_listener */ "../lib/index.js");
+/* harmony import */ var _snowshoe_stamp_listener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @snowshoe/stamp_listener */ "./node_modules/@snowshoe/stamp_listener/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var notyf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! notyf */ "./node_modules/notyf/notyf.es.js");
@@ -2878,78 +2878,61 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "../lib/index.js":
-/*!***********************!*\
-  !*** ../lib/index.js ***!
-  \***********************/
+/***/ "./node_modules/@snowshoe/stamp_listener/index.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@snowshoe/stamp_listener/index.js ***!
+  \********************************************************/
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+class StampListener {
+    constructor(config) {
+        this.stampScreenElement = config.stampScreenElementId ?
+            document.getElementById(config.stampScreenElementId) :
+            window;
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var StampListener = /*#__PURE__*/function () {
-  function StampListener(config) {
-    _classCallCheck(this, StampListener);
-
-    this.stampScreenElement = config.stampScreenElementId ? document.getElementById(config.stampScreenElementId) : window;
-
-    if (!this.stampScreenElement) {
-      console.warn("StampListener requires an ID of a valid element. ID provided: ".concat(config.stampScreenElementId));
-      return;
-    }
-
-    this.isScreenStampable = true;
-    this.preventScrolling = config.preventScrolling || false;
-    this.preventZooming = config.preventZooming || false;
-
-    if (this.preventScrolling) {
-      this.stampScreenElement.addEventListener('touchmove', function (event) {
-        // Prevent scrolling on this element
-        event.preventDefault();
-      });
-    }
-
-    if (this.preventZooming) {
-      this.stampScreenElement.addEventListener('gesturechange', function (event) {
-        // Disable browser zoom
-        event.preventDefault();
-      });
-    }
-  }
-
-  _createClass(StampListener, [{
-    key: "listen",
-    value: function listen(onStamp) {
-      var _this = this;
-
-      this.stampScreenElement.addEventListener('touchstart', function (event) {
-        var touches = Object.values(event.touches);
-
-        if (touches.length >= 5 && _this.isScreenStampable) {
-          _this.isScreenStampable = false;
-          var stampDataPoints = touches.map(function (touch) {
-            return [touch.pageX, touch.pageY];
-          });
-
-          if (onStamp instanceof Function) {
-            onStamp(stampDataPoints, function () {
-              return _this.isScreenStampable = true;
-            });
-          }
+        if (!this.stampScreenElement) {
+            console.warn(`StampListener requires an ID of a valid element. ID provided: ${config.stampScreenElementId}`);
+            return;
         }
-      });
-    }
-  }]);
 
-  return StampListener;
-}();
+        this.isScreenStampable = true;
+
+        this.preventScrolling = config.preventScrolling || false;
+        this.preventZooming = config.preventZooming || false;
+
+        if (this.preventScrolling) {
+            this.stampScreenElement.addEventListener('touchmove', event => {
+                // Prevent scrolling on this element
+                event.preventDefault();
+            });
+        }
+
+        if (this.preventZooming) {
+            this.stampScreenElement.addEventListener('gesturechange', event => {
+                // Disable browser zoom
+                event.preventDefault();
+            });
+        }
+    }
+
+    listen(onStamp) {
+        this.stampScreenElement.addEventListener('touchstart', event => {
+            const touches = Object.values(event.touches);
+            if (touches.length >= 5 && this.isScreenStampable) {
+                this.isScreenStampable = false;
+                const stampDataPoints = touches.map(touch => [touch.pageX, touch.pageY]);
+                if (onStamp instanceof Function) {
+                    onStamp(stampDataPoints, () => this.isScreenStampable = true);
+                }
+            }
+        });
+    }
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (StampListener);
+
 
 /***/ })
 

@@ -1,15 +1,16 @@
 {
   "name": "snowshoe-stamp-listener-demo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "SnowShoe. Inc",
   "license": "ISC",
   "dependencies": {
-    "@snowshoe/stamp_listener": "file:../lib/",
+    "@snowshoe/stamp_listener": "0.1.0",
     "axios": "^0.24.0",
     "bootstrap": "^5.1.3",
     "notyf": "^3.10.0"
